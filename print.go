@@ -6,59 +6,59 @@ import (
 	"os"
 )
 
-func printErrorf(errMsgFmt string, v ...any) {
+func PrintErrorf(errMsgFmt string, v ...any) {
 	c := color.New(color.FgHiRed)
 	f := fmt.Sprintf("ERROR: %s\n", errMsgFmt)
 	_, _ = c.Fprintf(os.Stderr, f, v...)
 }
 
-func failOnError(errMsg string) {
-	printError(errMsg)
+func FailOnError(errMsg string) {
+	PrintError(errMsg)
 	os.Exit(1)
 }
 
-func failOnErrorf(format string, v ...any) {
+func FailOnErrorf(format string, v ...any) {
 	c := color.New(color.FgHiRed)
 	f := fmt.Sprintf("ERROR: %s\n", format)
 	_, _ = c.Fprintf(os.Stderr, f, v...)
 	os.Exit(1)
 }
 
-func checkErrorfOnFailf(err error, errMsgFmt string, v ...any) {
+func CheckErrorfOnFailf(err error, errMsgFmt string, v ...any) {
 	if err != nil {
-		failOnErrorf(errMsgFmt, v...)
+		FailOnErrorf(errMsgFmt, v...)
 	}
 }
 
-func checkErrorfOnFail(err error) {
+func CheckErrorfOnFail(err error) {
 	if err != nil {
-		failOnErrorf("%v", err)
+		FailOnErrorf("%v", err)
 	}
 }
 
-func printInfo(msg string) {
+func PrintInfo(msg string) {
 	c := color.New(color.FgHiGreen)
 	_, _ = c.Fprintf(os.Stderr, "INFO: %s\n", msg)
 }
 
-func printInfof(format string, v ...any) {
+func PrintInfof(format string, v ...any) {
 	c := color.New(color.FgHiGreen)
 	f := fmt.Sprintf("INFO: %s\n", format)
 	_, _ = c.Fprintf(os.Stderr, f, v...)
 }
 
-func printWarn(msg string) {
+func PrintWarn(msg string) {
 	c := color.New(color.FgHiYellow)
 	_, _ = c.Fprintf(os.Stderr, "WARN: %s\n", msg)
 }
 
-func printWarnf(format string, v ...any) {
+func PrintWarnf(format string, v ...any) {
 	c := color.New(color.FgHiYellow)
 	f := fmt.Sprintf("WARN: %s\n", format)
 	_, _ = c.Fprintf(os.Stderr, f, v...)
 }
 
-func printError(errMsg string) {
+func PrintError(errMsg string) {
 	c := color.New(color.FgHiRed)
 	_, _ = c.Fprintf(os.Stderr, "ERROR: %s\n", errMsg)
 }

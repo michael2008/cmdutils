@@ -7,6 +7,11 @@ import (
 	"os"
 )
 
+func DisableFlagSort(cmd *cobra.Command) {
+	cmd.Flags().SortFlags = false
+	cmd.PersistentFlags().SortFlags = false
+}
+
 func flagFail(cmd *cobra.Command, name string) {
 	fmt.Printf("ERROR: flag '%s' is required\n", name)
 	_ = cmd.Usage()
