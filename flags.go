@@ -1,0 +1,88 @@
+package cmdutils
+
+import (
+	"fmt"
+	"github.com/spf13/cobra"
+	"golang.org/x/exp/constraints"
+	"os"
+)
+
+func flagFail(cmd *cobra.Command, name string) {
+	fmt.Printf("ERROR: flag '%s' is required\n", name)
+	_ = cmd.Usage()
+	os.Exit(1)
+}
+
+func MustGetFlagString(cmd *cobra.Command, name string) string {
+	flag, err := cmd.Flags().GetString(name)
+	if err != nil || flag == "" {
+		flagFail(cmd, name)
+	}
+	return flag
+}
+
+func MustGetFlagBool(cmd *cobra.Command, name string) bool {
+	flag, err := cmd.Flags().GetBool(name)
+	if err != nil {
+		flagFail(cmd, name)
+	}
+	return flag
+}
+
+func MustGetFlagInt(cmd *cobra.Command, name string) int {
+	flag, err := cmd.Flags().GetInt(name)
+	if err != nil {
+		flagFail(cmd, name)
+	}
+	return flag
+}
+
+func MustGetFlagUint(cmd *cobra.Command, name string) uint {
+	flag, err := cmd.Flags().GetUint(name)
+	if err != nil {
+		flagFail(cmd, name)
+	}
+	return flag
+}
+
+func MustGetFlagUint64(cmd *cobra.Command, name string) uint64 {
+	flag, err := cmd.Flags().GetUint64(name)
+	if err != nil {
+		flagFail(cmd, name)
+	}
+	return flag
+}
+
+func MustGetFlagFloat64(cmd *cobra.Command, name string) float64 {
+	flag, err := cmd.Flags().GetFloat64(name)
+	if err != nil {
+		flagFail(cmd, name)
+	}
+	return flag
+}
+
+func GetFlagStringWithDefault(cmd *cobra.Command, name, defaultVal string) string {
+	flag, err := cmd.Flags().GetString(name)
+	if err != nil || flag == "" {
+		return defaultVal
+	}
+	return flag
+}
+
+func GetFlagStringEmpty(cmd *cobra.Command, name string) string {
+	return GetFlagStringWithDefault(cmd, name, "")
+}
+
+type Number interface {
+	constraints.Integer | constraints.Float
+}
+
+func FitInRange[T Number](v, low, high T) T {
+	if v < low {
+		return low
+	}
+	if v > high {
+		return high
+	}
+	return v
+}
