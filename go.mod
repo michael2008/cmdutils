@@ -1,4 +1,4 @@
-module opensource/micheal2008/cmdutils
+module github.com/michael2008/cmdutils
 
 go 1.19
 
