@@ -4,13 +4,10 @@ import (
 	"fmt"
 	"github.com/fatih/color"
 	"os"
+	"sync"
 )
 
-func PrintErrorf(errMsgFmt string, v ...any) {
-	c := color.New(color.FgHiRed)
-	f := fmt.Sprintf("ERROR: %s\n", errMsgFmt)
-	_, _ = c.Fprintf(os.Stderr, f, v...)
-}
+var _mu = sync.Mutex{}
 
 func FailOnError(errMsg string) {
 	PrintError(errMsg)
@@ -18,9 +15,7 @@ func FailOnError(errMsg string) {
 }
 
 func FailOnErrorf(format string, v ...any) {
-	c := color.New(color.FgHiRed)
-	f := fmt.Sprintf("ERROR: %s\n", format)
-	_, _ = c.Fprintf(os.Stderr, f, v...)
+	PrintErrorf(format, v...)
 	os.Exit(1)
 }
 
@@ -37,28 +32,46 @@ func CheckErrorfOnFail(err error) {
 }
 
 func PrintInfo(msg string) {
+	_mu.Lock()
 	c := color.New(color.FgHiGreen)
 	_, _ = c.Fprintf(os.Stderr, "INFO: %s\n", msg)
+	_mu.Unlock()
 }
 
 func PrintInfof(format string, v ...any) {
+	_mu.Lock()
 	c := color.New(color.FgHiGreen)
 	f := fmt.Sprintf("INFO: %s\n", format)
 	_, _ = c.Fprintf(os.Stderr, f, v...)
+	_mu.Unlock()
 }
 
 func PrintWarn(msg string) {
+	_mu.Lock()
 	c := color.New(color.FgHiYellow)
 	_, _ = c.Fprintf(os.Stderr, "WARN: %s\n", msg)
+	_mu.Unlock()
 }
 
 func PrintWarnf(format string, v ...any) {
+	_mu.Lock()
 	c := color.New(color.FgHiYellow)
 	f := fmt.Sprintf("WARN: %s\n", format)
 	_, _ = c.Fprintf(os.Stderr, f, v...)
+	_mu.Unlock()
 }
 
 func PrintError(errMsg string) {
+	_mu.Lock()
 	c := color.New(color.FgHiRed)
 	_, _ = c.Fprintf(os.Stderr, "ERROR: %s\n", errMsg)
+	_mu.Unlock()
+}
+
+func PrintErrorf(errMsgFmt string, v ...any) {
+	_mu.Lock()
+	c := color.New(color.FgHiRed)
+	f := fmt.Sprintf("ERROR: %s\n", errMsgFmt)
+	_, _ = c.Fprintf(os.Stderr, f, v...)
+	_mu.Unlock()
 }
