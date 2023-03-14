@@ -2,9 +2,10 @@ package cmdutils
 
 import (
 	"fmt"
-	"github.com/fatih/color"
 	"os"
 	"sync"
+
+	"github.com/fatih/color"
 )
 
 var _mu = sync.Mutex{}
@@ -73,5 +74,12 @@ func PrintErrorf(errMsgFmt string, v ...any) {
 	c := color.New(color.FgHiRed)
 	f := fmt.Sprintf("ERROR: %s\n", errMsgFmt)
 	_, _ = c.Fprintf(os.Stderr, f, v...)
+	_mu.Unlock()
+}
+
+func PrintHeader(header string) {
+	_mu.Lock()
+	c := color.New(color.FgHiMagenta)
+	_, _ = c.Printf("\n%s\n", header)
 	_mu.Unlock()
 }
