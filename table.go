@@ -1,8 +1,9 @@
 package cmdutils
 
 import (
-	"github.com/olekukonko/tablewriter"
 	"os"
+
+	"github.com/olekukonko/tablewriter"
 )
 
 func PrintTable(header []string, data [][]string) {
@@ -19,7 +20,7 @@ func PrintTableAlign(header []string, data [][]string, aligns []int) {
 
 type ColorFunc func(row []string) []tablewriter.Colors
 
-func PrintTableRich(header []string, data [][]string, mergeCols []int, aligns []int, colorFunc ColorFunc) {
+func PrintTableRich(header []string, data [][]string, mergeCols, aligns []int, colorFunc ColorFunc) {
 	table := newDefaultTable(header, mergeCols, aligns)
 	if colorFunc == nil {
 		table.AppendBulk(data)
@@ -34,12 +35,12 @@ func PrintTableRich(header []string, data [][]string, mergeCols []int, aligns []
 // ColorMapping maps headerValue to func generating color by cellValue.
 type ColorMapping map[string]func(cellValue string) tablewriter.Colors
 
-func PrintTableRichMapping(header []string, data [][]string, mergeCols []int, aligns []int, colorMapping ColorMapping) {
+func PrintTableRichMapping(header []string, data [][]string, mergeCols, aligns []int, colorMapping ColorMapping) {
 	table := newDefaultTable(header, mergeCols, aligns)
 	if colorMapping == nil {
 		table.AppendBulk(data)
 	} else {
-		var funcList = make([]func(cellValue string) tablewriter.Colors, len(header))
+		funcList := make([]func(cellValue string) tablewriter.Colors, len(header))
 		for idx, h := range header {
 			if f, ok := colorMapping[h]; ok {
 				funcList[idx] = f
@@ -65,7 +66,15 @@ func PrintTableRichMapping(header []string, data [][]string, mergeCols []int, al
 	table.Render()
 }
 
-func newDefaultTable(header []string, mergeCols []int, aligns []int) *tablewriter.Table {
+func GetAlignCenter(rowSize int) []int {
+	aligns := make([]int, rowSize)
+	for i := range aligns {
+		aligns[i] = tablewriter.ALIGN_CENTER
+	}
+	return aligns
+}
+
+func newDefaultTable(header []string, mergeCols, aligns []int) *tablewriter.Table {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetAutoFormatHeaders(false)
 	table.SetAutoWrapText(true)
