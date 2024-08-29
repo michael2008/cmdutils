@@ -91,3 +91,35 @@ func FitInRange[T Number](v, low, high T) T {
 	}
 	return v
 }
+
+func GetFlagIntWithDefault(cmd *cobra.Command, name string, defaultVal int) int {
+	val, err := cmd.Flags().GetInt(name)
+	if err != nil {
+		return defaultVal
+	}
+	return val
+}
+
+func GetFlagUintWithDefault(cmd *cobra.Command, name string, defaultVal uint) uint {
+	val, err := cmd.Flags().GetUint(name)
+	if err != nil {
+		return defaultVal
+	}
+	return val
+}
+
+func GetFlagUint64WithDefault(cmd *cobra.Command, name string, defaultVal uint64) uint64 {
+	val, err := cmd.Flags().GetUint64(name)
+	if err != nil {
+		return defaultVal
+	}
+	return val
+}
+
+func GetFlagBoolWithDefault(cmd *cobra.Command, name string, defaultVal bool) bool {
+	val, err := cmd.Flags().GetBool(name)
+	if err != nil {
+		return defaultVal
+	}
+	return val
+}
